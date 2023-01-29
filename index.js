@@ -1,3 +1,4 @@
+import { InputHandler } from "./input.js";
 import { Player } from "./player.js";
 //be careful !! import in from ./player.js not just ./player
 
@@ -16,13 +17,24 @@ window.addEventListener("load", () => {
       this.width = width;
       this.height = height;
       this.player = new Player(this); //this passed here is the game object!
+      this.input = new InputHandler();
     }
-    update() {}
+    update() {
+      this.player.update(this.input.keys);
+    }
     draw(context) {
       this.player.draw(context);
     }
   }
   const game = new Game(canvas.width, canvas.height);
-  game.draw(context);
-  console.log(game);
+  const animationLogic = () => {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    game.draw(context);
+    game.update();
+  };
+  const animate = () => {
+    animationLogic();
+    requestAnimationFrame(animate);
+  };
+  animate();
 });
