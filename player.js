@@ -9,9 +9,11 @@ export class Player {
     this.width = 100; //these are hardcoded for performance reasons
     this.height = 91.3;
     this.x = 10;
-    this.y = 100;
-    this.speed = 0;
-    this.maxSpeed = 10;
+    this.y = this.game.height - this.height;
+    this.speedX = 0;
+    this.speedY = 0;
+    this.maxSpeedY = 10;
+    this.weight = 0.1;
   }
   update(input) {
     input.forEach((key) => {
@@ -29,7 +31,17 @@ export class Player {
           }
           break;
         case "ArrowUp":
-          this.y--;
+          if (this.onGround()) {
+            this.speedY += 8;
+            this.y -= this.speedY;
+          }
+
+          // if (!this.onGround()) {
+          //   this.speedY -= this.weight;
+          //   this.y -= this.speedY;
+          // } else {
+          //   this.speedY = 0;
+          // }
           break;
         case "ArrowDown":
           this.y++;
@@ -38,13 +50,21 @@ export class Player {
           this.width++;
           this.height++;
           break;
-        default:
-          break;
       }
     });
+
+    if (!this.onGround()) {
+      this.speedY -= this.weight;
+      this.y -= this.speedY;
+    } else {
+      this.speedY = 0;
+    }
   }
   draw(context) {
     //it needs context to know which canvas to draw on.
     context.fillRect(this.x, this.y, this.width, this.height);
+  }
+  onGround() {
+    return this.y >= this.game.height - this.height;
   }
 }
