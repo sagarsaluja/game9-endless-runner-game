@@ -14,6 +14,7 @@ export class Player {
     this.speedY = 0;
     this.maxSpeedY = 10;
     this.weight = 0.1;
+    this.image = document.getElementById("player");
   }
   update(input) {
     input.forEach((key) => {
@@ -35,16 +36,8 @@ export class Player {
             this.speedY += 8;
             this.y -= this.speedY;
           }
-
-          // if (!this.onGround()) {
-          //   this.speedY -= this.weight;
-          //   this.y -= this.speedY;
-          // } else {
-          //   this.speedY = 0;
-          // }
           break;
         case "ArrowDown":
-          this.y++;
           break;
         case "Enter":
           this.width++;
@@ -62,9 +55,19 @@ export class Player {
   }
   draw(context) {
     //it needs context to know which canvas to draw on.
-    context.fillRect(this.x, this.y, this.width, this.height);
+    context.drawImage(
+      this.image,
+      0,
+      0,
+      this.width,
+      this.height,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    );
   }
   onGround() {
-    return this.y >= this.game.height - this.height;
+    return this.y > this.game.height - this.height;
   }
 }
