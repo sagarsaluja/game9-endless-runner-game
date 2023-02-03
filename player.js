@@ -3,6 +3,7 @@
 //this way it only works when they are fully loaded.
 
 //this player class receives the entire game object
+import { Jumping, Running, Sitting, states } from "./playerStates.js";
 export class Player {
   constructor(game) {
     this.game = game;
@@ -15,23 +16,30 @@ export class Player {
     this.maxSpeedY = 10;
     this.weight = 0.1;
     this.image = document.getElementById("player");
+    this.states = [new Sitting(this), new Running(this), new Jumping(this)];
+    this.currentState = this.states[0];
+    this.currentFrameX = 0;
+    this.currentFrameY = 0;
   }
   update(input) {
     input.forEach((key) => {
       switch (key) {
         case "ArrowRight":
+          this.currentState.handleInput();
           this.x++;
           if (this.x + this.width > this.game.width) {
             this.x = this.game.width - this.width;
           }
           break;
         case "ArrowLeft":
+          this.currentState.handleInput();
           this.x--;
           if (this.x < 0) {
             this.x = 0;
           }
           break;
         case "ArrowUp":
+          this.currentState.handleInput();
           if (this.onGround()) {
             this.speedY += 8;
             this.y -= this.speedY;
@@ -57,8 +65,8 @@ export class Player {
     //it needs context to know which canvas to draw on.
     context.drawImage(
       this.image,
-      0,
-      0,
+      this.currentFrameX,
+      this.currentFrameY * this.height,
       this.width,
       this.height,
       this.x,
@@ -69,5 +77,9 @@ export class Player {
   }
   onGround() {
     return this.y > this.game.height - this.height;
+  }
+  setState(state) {
+    this.currentState = this.states[state];
+    this.currentState.enter();
   }
 }
