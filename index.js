@@ -16,25 +16,30 @@ window.addEventListener("load", () => {
     constructor(width, height) {
       this.width = width;
       this.height = height;
+      this.groundMargin = 50;
       this.player = new Player(this); //this passed here is the game object!
       this.input = new InputHandler();
     }
-    update() {
-      this.player.update(this.input.keys);
+    update(deltaTime) {
+      this.player.update(this.input.keys, deltaTime);
     }
     draw(context) {
       this.player.draw(context);
     }
   }
   const game = new Game(canvas.width, canvas.height);
-  const animationLogic = () => {
+  let accumulatedTime = 0,
+    deltaTime = 0;
+  const animationLogic = (timeStamp) => {
+    deltaTime = timeStamp - accumulatedTime;
+    accumulatedTime = timeStamp;
     context.clearRect(0, 0, canvas.width, canvas.height);
     game.draw(context);
-    game.update();
+    game.update(deltaTime);
   };
-  const animate = () => {
-    animationLogic();
+  const animate = (timeStamp) => {
+    animationLogic(timeStamp);
     requestAnimationFrame(animate);
   };
-  animate();
+  animate(0);
 });

@@ -27,6 +27,7 @@ export class Sitting extends State {
 
   enter() {
     //method just sets the Y coordinate
+    this.maxFrame = 5;
     this.player.currentFrameY = 5;
   }
   handleInput() {
@@ -47,6 +48,7 @@ export class Running extends State {
   }
 
   enter() {
+    this.player.maxFrame = 9;
     this.player.currentFrameY = 3;
   }
   handleInput() {
@@ -60,6 +62,7 @@ export class Jumping extends State {
   }
 
   enter() {
+    this.player.maxFrame = 6;
     this.player.currentFrameY = 1;
   }
   handleInput() {

@@ -10,7 +10,7 @@ export class Player {
     this.width = 100; //these are hardcoded for performance reasons
     this.height = 91.3;
     this.x = 10;
-    this.y = this.game.height - this.height;
+    this.y = this.game.height - this.height - game.groundMargin;
     this.speedX = 0;
     this.speedY = 0;
     this.maxSpeedY = 10;
@@ -20,8 +20,12 @@ export class Player {
     this.currentState = this.states[0];
     this.currentFrameX = 0;
     this.currentFrameY = 0;
+    this.maxFrame = 6;
+    this.fps = 20; //the sprite sheet is designed for 20 fps , and we can pass delta Time to the player class to set a different fps
+    this.frameInterval = 50; //just convert fps to miliseconds and invert it. 1000/20
+    this.timeToUpdateFrame = 0;
   }
-  update(input) {
+  update(input, deltaTime) {
     input.forEach((key) => {
       switch (key) {
         case "ArrowRight":
@@ -60,12 +64,25 @@ export class Player {
     } else {
       this.speedY = 0;
     }
+    if (this.timeToUpdateFrame > this.frameInterval) {
+      this.updateFrame();
+      this.timeToUpdateFrame = 0;
+    } else {
+      this.timeToUpdateFrame += deltaTime;
+    }
+  }
+  updateFrame() {
+    if (this.currentFrameX < this.maxFrame) {
+      this.currentFrameX++;
+    } else {
+      this.currentFrameX = 0;
+    }
   }
   draw(context) {
     //it needs context to know which canvas to draw on.
     context.drawImage(
       this.image,
-      this.currentFrameX,
+      this.currentFrameX * this.width,
       this.currentFrameY * this.height,
       this.width,
       this.height,
@@ -76,7 +93,7 @@ export class Player {
     );
   }
   onGround() {
-    return this.y > this.game.height - this.height;
+    return this.y >= this.game.height - this.height - this.game.groundMargin;
   }
   setState(state) {
     this.currentState = this.states[state];
