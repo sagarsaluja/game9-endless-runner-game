@@ -3,7 +3,7 @@
 //this way it only works when they are fully loaded.
 
 //this player class receives the entire game object
-import { Jumping, Running, Sitting, states } from "./playerStates.js";
+import { Falling, Jumping, Running, Sitting, states } from "./playerStates.js";
 export class Player {
   constructor(game) {
     this.game = game;
@@ -13,57 +13,43 @@ export class Player {
     this.y = this.game.height - this.height - game.groundMargin;
     this.speedX = 0;
     this.speedY = 0;
-    this.maxSpeedY = 10;
-    this.weight = 0.1;
+    this.weight = 0.2;
     this.image = document.getElementById("player");
-    this.states = [new Sitting(this), new Running(this), new Jumping(this)];
+    this.states = [
+      new Sitting(this),
+      new Running(this),
+      new Jumping(this),
+      new Falling(this),
+    ];
     this.currentState = this.states[0];
     this.currentFrameX = 0;
-    this.currentFrameY = 0;
-    this.maxFrame = 6;
+    this.currentFrameY = 5;
+    this.maxFrame = 4;
     this.fps = 20; //the sprite sheet is designed for 20 fps , and we can pass delta Time to the player class to set a different fps
     this.frameInterval = 50; //just convert fps to miliseconds and invert it. 1000/20
     this.timeToUpdateFrame = 0;
   }
   update(input, deltaTime) {
     input.forEach((key) => {
-      switch (key) {
-        case "ArrowRight":
-          this.currentState.handleInput();
-          this.x++;
-          if (this.x + this.width > this.game.width) {
-            this.x = this.game.width - this.width;
-          }
-          break;
-        case "ArrowLeft":
-          this.currentState.handleInput();
-          this.x--;
-          if (this.x < 0) {
-            this.x = 0;
-          }
-          break;
-        case "ArrowUp":
-          this.currentState.handleInput();
-          if (this.onGround()) {
-            this.speedY += 8;
-            this.y -= this.speedY;
-          }
-          break;
-        case "ArrowDown":
-          break;
-        case "Enter":
-          this.width++;
-          this.height++;
-          break;
-      }
+      this.currentState.handleInput(key);
     });
+    if (this.speedY > 0) {
+      this.setState(states.FALLING);
+    }
+    this.y += this.speedY;
+    if (this.x < 0) this.x = 0;
+    if (this.x + this.width > this.game.width) {
+      this.x = this.game.width - this.width;
+    }
 
     if (!this.onGround()) {
-      this.speedY -= this.weight;
-      this.y -= this.speedY;
-    } else {
+      this.speedY += this.weight;
+    }
+    if (this.onGround() && this.currentState.state === states["FALLING"]) {
+      this.setState(states.RUNNING);
       this.speedY = 0;
     }
+
     if (this.timeToUpdateFrame > this.frameInterval) {
       this.updateFrame();
       this.timeToUpdateFrame = 0;
@@ -79,7 +65,6 @@ export class Player {
     }
   }
   draw(context) {
-    //it needs context to know which canvas to draw on.
     context.drawImage(
       this.image,
       this.currentFrameX * this.width,
