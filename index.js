@@ -1,5 +1,6 @@
 import { InputHandler } from "./input.js";
 import { Player } from "./player.js";
+import { Layer } from "./layer.js";
 //be careful !! import in from ./player.js not just ./player
 
 window.addEventListener("load", () => {
@@ -19,11 +20,25 @@ window.addEventListener("load", () => {
       this.groundMargin = 50;
       this.player = new Player(this); //this passed here is the game object!
       this.input = new InputHandler();
+      this.speed = 1;
+      this.layers = [
+        new Layer(0, "layer1", this),
+        new Layer(0.4, "layer2", this),
+        new Layer(0.6, "layer3", this),
+        new Layer(0.8, "layer4", this),
+        new Layer(1, "layer5", this),
+      ];
     }
     update(deltaTime) {
       this.player.update(this.input.keys, deltaTime);
+      this.layers.forEach((layer) => {
+        layer.update();
+      });
     }
     draw(context) {
+      this.layers.forEach((layer) => {
+        layer.draw(context);
+      });
       this.player.draw(context);
     }
   }
