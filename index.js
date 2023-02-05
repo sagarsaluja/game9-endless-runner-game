@@ -1,6 +1,13 @@
 import { InputHandler } from "./input.js";
 import { Player } from "./player.js";
 import { Layer } from "./layer.js";
+import {
+  Enemy,
+  flyingEnemy,
+  spiderEnemy,
+  plantEnemy,
+  bigSpiderEnemy,
+} from "./enemies.js";
 //be careful !! import in from ./player.js not just ./player
 
 window.addEventListener("load", () => {
@@ -28,18 +35,40 @@ window.addEventListener("load", () => {
         new Layer(0.8, "layer4", this),
         new Layer(1, "layer5", this),
       ];
+      this.enemies = [
+        new flyingEnemy(this, "enemy_fly"),
+        // new plantEnemy(this, "enemy_plant"),
+        // new spiderEnemy(this, "enemy_spider"),
+        // new bigSpiderEnemy(this, "enemy_spider_big"),
+      ];
+      this.enemyTimer = 0;
+      this.enemyInterval = 100;
     }
     update(deltaTime) {
+      if (this.enemyTimer > this.enemyInterval) {
+        this.addEnemies();
+        this.enemyTimer = 0;
+      } else {
+        this.enemyTimer++;
+      }
+      this.enemies = this.enemies.filter(
+        (enemy) => enemy.markedForDeletion === false
+      );
       this.player.update(this.input.keys, deltaTime);
       this.layers.forEach((layer) => {
         layer.update(this.speed);
       });
+      this.enemies.forEach((enemy) => {
+        enemy.update(deltaTime);
+      });
     }
     draw(context) {
-      this.layers.forEach((layer) => {
-        layer.draw(context);
+      [...this.layers, ...this.enemies, this.player].forEach((item) => {
+        item.draw(context);
       });
-      this.player.draw(context);
+    }
+    addEnemies() {
+      this.enemies.push(new flyingEnemy(this, "enemy_fly"));
     }
   }
   const game = new Game(canvas.width, canvas.height);
