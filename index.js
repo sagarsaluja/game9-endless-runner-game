@@ -20,7 +20,7 @@ window.addEventListener("load", () => {
       this.groundMargin = 50;
       this.player = new Player(this); //this passed here is the game object!
       this.input = new InputHandler();
-      this.speed = 1;
+      this.speed = 0;
       this.layers = [
         new Layer(0, "layer1", this),
         new Layer(0.4, "layer2", this),
@@ -32,7 +32,7 @@ window.addEventListener("load", () => {
     update(deltaTime) {
       this.player.update(this.input.keys, deltaTime);
       this.layers.forEach((layer) => {
-        layer.update();
+        layer.update(this.speed);
       });
     }
     draw(context) {

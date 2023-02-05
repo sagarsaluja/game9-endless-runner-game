@@ -34,7 +34,7 @@ export class Player {
       this.currentState.handleInput(key);
     });
     if (this.speedY > 0) {
-      this.setState(states.FALLING);
+      this.setState(states.FALLING, 1);
     }
     this.y += this.speedY;
     if (this.x < 0) this.x = 0;
@@ -46,7 +46,7 @@ export class Player {
       this.speedY += this.weight;
     }
     if (this.onGround() && this.currentState.state === states["FALLING"]) {
-      this.setState(states.RUNNING);
+      this.setState(states.RUNNING, 1);
       this.speedY = 0;
     }
 
@@ -80,8 +80,9 @@ export class Player {
   onGround() {
     return this.y >= this.game.height - this.height - this.game.groundMargin;
   }
-  setState(state) {
+  setState(state, speed) {
     this.currentState = this.states[state];
+    this.game.speed = speed;
     this.currentState.enter();
   }
 }

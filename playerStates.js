@@ -23,7 +23,7 @@ export class Sitting extends State {
   }
   handleInput(key) {
     if (["ArrowLeft", "ArrowRight"].includes(key)) {
-      this.player.setState(states.RUNNING);
+      this.player.setState(states.RUNNING, 1);
     }
   }
 }
@@ -40,10 +40,10 @@ export class Running extends State {
   handleInput(key) {
     handleHorizontalMovement(key, this.player);
     if (key === "ArrowUp" && this.player.onGround()) {
-      this.player.setState(states.JUMPING);
+      this.player.setState(states.JUMPING, 1);
     }
     if (key === "ArrowDown" && this.player.onGround()) {
-      this.player.setState(states.SITTING);
+      this.player.setState(states.SITTING, 0);
     }
   }
 }

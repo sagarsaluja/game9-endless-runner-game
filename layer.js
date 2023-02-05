@@ -1,14 +1,16 @@
 export class Layer {
-  constructor(speed, image, game) {
+  constructor(speedModifier, image, game) {
     this.game = game;
-    this.speed = this.game.speed * speed;
+    this.speedModifier = speedModifier;
+    this.speed = 0;
     this.image = document.getElementById(image);
     this.width = this.image.width;
     this.height = this.image.height;
     this.x = 0;
     this.y = 0;
   }
-  update() {
+  update(gameSpeed) {
+    this.speed = gameSpeed * this.speedModifier;
     if (this.x <= -this.width) {
       this.x = 0;
     }
