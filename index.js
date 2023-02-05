@@ -17,7 +17,7 @@ window.addEventListener("load", () => {
     constructor(width, height) {
       this.width = width;
       this.height = height;
-      this.groundMargin = 50;
+      this.groundMargin = 80;
       this.player = new Player(this); //this passed here is the game object!
       this.input = new InputHandler();
       this.speed = 0;
