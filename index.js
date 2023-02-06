@@ -36,8 +36,6 @@ window.addEventListener("load", () => {
         new Layer(1, "layer5", this),
       ];
       this.enemies = [
-        new flyingEnemy(this, "enemy_fly"),
-        // new plantEnemy(this, "enemy_plant"),
         // new spiderEnemy(this, "enemy_spider"),
         // new bigSpiderEnemy(this, "enemy_spider_big"),
       ];
@@ -69,6 +67,9 @@ window.addEventListener("load", () => {
     }
     addEnemies() {
       this.enemies.push(new flyingEnemy(this, "enemy_fly"));
+      if (this.speed > 0 && Math.random() < 0.2) {
+        this.enemies.push(new plantEnemy(this, "enemy_plant"));
+      }
     }
   }
   const game = new Game(canvas.width, canvas.height);
