@@ -37,7 +37,6 @@ window.addEventListener("load", () => {
       ];
       this.enemies = [
         // new spiderEnemy(this, "enemy_spider"),
-        // new bigSpiderEnemy(this, "enemy_spider_big"),
       ];
       this.enemyTimer = 0;
       this.enemyInterval = 100;
@@ -69,6 +68,9 @@ window.addEventListener("load", () => {
       this.enemies.push(new flyingEnemy(this, "enemy_fly"));
       if (this.speed > 0 && Math.random() < 0.2) {
         this.enemies.push(new plantEnemy(this, "enemy_plant"));
+      }
+      if (this.speed > 0 && Math.random() < 0.3) {
+        this.enemies.push(new spiderEnemy(this, "enemy_spider_big"));
       }
     }
   }

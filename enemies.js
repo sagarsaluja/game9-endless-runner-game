@@ -1,3 +1,5 @@
+/** @type {HTMLCanvasElement} */
+
 export class Enemy {
   constructor(game, image, dividingWidth) {
     this.game = game;
@@ -72,9 +74,32 @@ export class plantEnemy extends Enemy {
 }
 export class spiderEnemy extends Enemy {
   constructor(game, image) {
-    super(game, image, 5);
+    super(game, image, 6);
+    this.maxFrame = 5;
+    this.x = this.game.width;
+    this.y = 0;
+    this.speedX = this.game.speed;
+    this.angle = Math.random() * Math.PI * 2 - Math.PI;
+    this.angleSpeed = Math.random() * 0.01 + 0.01;
+    this.speedY = 0.5 * Math.sin(this.angle);
+  }
+  update(deltaTime) {
+    this.speedX = this.game.speed;
+    this.angle += this.angleSpeed;
+    this.y = this.game.height * 0.25 * Math.sin(this.angle) + this.height;
+    super.update(deltaTime);
+  }
+  draw(context) {
+    context.beginPath();
+    context.moveTo(this.x + this.width * 0.5, 0);
+    context.lineTo(this.x + this.width * 0.5, this.y + this.height * 0.5);
+    context.strokeStyle = "black";
+    context.lineWidth = 1;
+    context.stroke();
+    super.draw(context);
   }
 }
+
 export class bigSpiderEnemy extends Enemy {
   constructor(game, image) {
     super(game, image, 5);
