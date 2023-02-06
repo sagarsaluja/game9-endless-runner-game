@@ -8,6 +8,7 @@ import {
   plantEnemy,
   bigSpiderEnemy,
 } from "./enemies.js";
+import { Collision } from "./collision.js";
 //be careful !! import in from ./player.js not just ./player
 
 window.addEventListener("load", () => {
@@ -40,8 +41,10 @@ window.addEventListener("load", () => {
       ];
       this.enemyTimer = 0;
       this.enemyInterval = 100;
+      this.collisionSplash = [];
     }
     update(deltaTime) {
+      this.detectCollision();
       if (this.enemyTimer > this.enemyInterval) {
         this.addEnemies();
         this.enemyTimer = 0;
@@ -51,6 +54,9 @@ window.addEventListener("load", () => {
       this.enemies = this.enemies.filter(
         (enemy) => enemy.markedForDeletion === false
       );
+      this.collisionSplash = this.collisionSplash.filter(
+        (splash) => splash.markedForDeletion === false
+      );
       this.player.update(this.input.keys, deltaTime);
       this.layers.forEach((layer) => {
         layer.update(this.speed);
@@ -58,9 +64,17 @@ window.addEventListener("load", () => {
       this.enemies.forEach((enemy) => {
         enemy.update(deltaTime);
       });
+      this.collisionSplash.forEach((splash) => {
+        splash.update(deltaTime);
+      });
     }
     draw(context) {
-      [...this.layers, ...this.enemies, this.player].forEach((item) => {
+      [
+        ...this.layers,
+        ...this.enemies,
+        ...this.collisionSplash,
+        this.player,
+      ].forEach((item) => {
         item.draw(context);
       });
     }
@@ -72,6 +86,21 @@ window.addEventListener("load", () => {
       if (this.speed > 0 && Math.random() < 0.3) {
         this.enemies.push(new spiderEnemy(this, "enemy_spider_big"));
       }
+    }
+    detectCollision() {
+      this.enemies.forEach((enemy) => {
+        if (
+          enemy.x <= this.player.x + this.player.width &&
+          enemy.x >= this.player.x - enemy.width &&
+          enemy.y <= this.player.y + this.player.height &&
+          enemy.y >= this.player.y - enemy.height
+        ) {
+          enemy.markedForDeletion = true;
+          this.collisionSplash.push(
+            new Collision("boom", 5, 4, enemy.x, enemy.y)
+          );
+        }
+      });
     }
   }
   const game = new Game(canvas.width, canvas.height);

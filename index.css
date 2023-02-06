@@ -24,7 +24,8 @@
 #enemy_fly,
 #enemy_plant,
 #enemy_spider,
-#enemy_spider_big
+#enemy_spider_big,
+#boom
 {
     display: none;
 }
