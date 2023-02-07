@@ -1,8 +1,23 @@
 export const states = {
-  SITTING: 0,
-  RUNNING: 1,
-  JUMPING: 2,
-  FALLING: 3,
+  IDLE: 0,
+
+  JUMPING: 1,
+
+  FALLING: 2,
+
+  RUNNING: 3,
+
+  DIZZY: 4,
+
+  SITTING: 5,
+
+  ROLLING: 6,
+
+  BITE: 7,
+
+  KO: 8,
+
+  GET_HIT: 9,
 };
 
 class State {
@@ -22,6 +37,7 @@ export class Sitting extends State {
     this.player.currentFrameY = 5;
   }
   handleInput(key) {
+    console.log("reaching?");
     if (["ArrowLeft", "ArrowRight"].includes(key)) {
       this.player.setState(states.RUNNING, 1);
     }
@@ -74,6 +90,36 @@ export class Falling extends State {
   }
   handleInput(key) {
     handleHorizontalMovement(key, this.player);
+  }
+}
+export class Rolling extends State {
+  constructor(player) {
+    super("ROLLING", player);
+  }
+}
+export class Idle extends State {
+  constructor(player) {
+    super("IDLE", player);
+  }
+}
+export class Dizzy extends State {
+  constructor(player) {
+    super("IDLE", player);
+  }
+}
+export class Bite extends State {
+  constructor(player) {
+    super("IDLE", player);
+  }
+}
+export class KO extends State {
+  constructor(player) {
+    super("IDLE", player);
+  }
+}
+export class GetHit extends State {
+  constructor(player) {
+    super("IDLE", player);
   }
 }
 const handleHorizontalMovement = (key, player) => {

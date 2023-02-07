@@ -1,13 +1,7 @@
 import { InputHandler } from "./input.js";
 import { Player } from "./player.js";
 import { Layer } from "./layer.js";
-import {
-  Enemy,
-  flyingEnemy,
-  spiderEnemy,
-  plantEnemy,
-  bigSpiderEnemy,
-} from "./enemies.js";
+import { flyingEnemy, spiderEnemy, plantEnemy } from "./enemies.js";
 import { Collision } from "./collision.js";
 //be careful !! import in from ./player.js not just ./player
 
@@ -36,9 +30,7 @@ window.addEventListener("load", () => {
         new Layer(0.8, "layer4", this),
         new Layer(1, "layer5", this),
       ];
-      this.enemies = [
-        // new spiderEnemy(this, "enemy_spider"),
-      ];
+      this.enemies = [];
       this.enemyTimer = 0;
       this.enemyInterval = 100;
       this.collisionSplash = [];

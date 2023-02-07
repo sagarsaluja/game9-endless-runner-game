@@ -3,7 +3,19 @@
 //this way it only works when they are fully loaded.
 
 //this player class receives the entire game object
-import { Falling, Jumping, Running, Sitting, states } from "./playerStates.js";
+import {
+  Bite,
+  Dizzy,
+  Falling,
+  GetHit,
+  Idle,
+  Jumping,
+  KO,
+  Rolling,
+  Running,
+  Sitting,
+  states,
+} from "./playerStates.js";
 export class Player {
   constructor(game) {
     this.game = game;
@@ -16,12 +28,19 @@ export class Player {
     this.weight = 0.2;
     this.image = document.getElementById("player");
     this.states = [
-      new Sitting(this),
-      new Running(this),
+      new Idle(this),
       new Jumping(this),
       new Falling(this),
+      new Running(this),
+      new Dizzy(this),
+      new Sitting(this),
+      new Rolling(this),
+      new Bite(this),
+      new KO(this),
+      new GetHit(this),
     ];
-    this.currentState = this.states[0];
+
+    this.currentState = this.states[5];
     this.currentFrameX = 0;
     this.currentFrameY = 5;
     this.maxFrame = 4;
@@ -65,7 +84,6 @@ export class Player {
     }
   }
   draw(context) {
-    context.strokeRect(this.x, this.y, this.width, this.height);
     context.drawImage(
       this.image,
       this.currentFrameX * this.width,
