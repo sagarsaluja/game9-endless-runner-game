@@ -49,9 +49,8 @@ export class Player {
     this.timeToUpdateFrame = 0;
   }
   update(input, deltaTime) {
-    input.forEach((key) => {
-      this.currentState.handleInput(key);
-    });
+    this.currentState.handleInput(input);
+
     if (this.speedY > 0) {
       this.setState(states.FALLING, 1);
     }

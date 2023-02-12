@@ -36,9 +36,8 @@ export class Sitting extends State {
     this.player.maxFrame = 4;
     this.player.currentFrameY = 5;
   }
-  handleInput(key) {
-    console.log("reaching?");
-    if (["ArrowLeft", "ArrowRight"].includes(key)) {
+  handleInput(input) {
+    if (input.has("ArrowLeft") || input.has("ArrowRight")) {
       this.player.setState(states.RUNNING, 1);
     }
   }
@@ -53,12 +52,12 @@ export class Running extends State {
     this.player.maxFrame = 8;
     this.player.currentFrameY = 3;
   }
-  handleInput(key) {
-    handleHorizontalMovement(key, this.player);
-    if (key === "ArrowUp" && this.player.onGround()) {
+  handleInput(input) {
+    handleHorizontalMovement(input, this.player);
+    if (input.has("ArrowUp") && this.player.onGround()) {
       this.player.setState(states.JUMPING, 1);
     }
-    if (key === "ArrowDown" && this.player.onGround()) {
+    if (input.has("ArrowDown") && this.player.onGround()) {
       this.player.setState(states.SITTING, 0);
     }
   }
@@ -74,8 +73,8 @@ export class Jumping extends State {
     this.player.currentFrameY = 1;
     this.player.speedY -= 10;
   }
-  handleInput(key) {
-    handleHorizontalMovement(key, this.player);
+  handleInput(input) {
+    handleHorizontalMovement(input, this.player);
   }
 }
 export class Falling extends State {
@@ -88,13 +87,21 @@ export class Falling extends State {
     this.player.maxFrame = 6;
     this.player.currentFrameY = 2;
   }
-  handleInput(key) {
-    handleHorizontalMovement(key, this.player);
+  handleInput(input) {
+    handleHorizontalMovement(input, this.player);
   }
 }
 export class Rolling extends State {
   constructor(player) {
     super("ROLLING", player);
+    this.player = player;
+  }
+  enter() {
+    this.player.maxFrame = 6;
+    this.player.currentFrameY = 6;
+  }
+  handleInput(input) {
+    handleHorizontalMovement(input, this.player);
   }
 }
 export class Idle extends State {
@@ -122,16 +129,18 @@ export class GetHit extends State {
     super("IDLE", player);
   }
 }
-const handleHorizontalMovement = (key, player) => {
-  switch (key) {
-    case "ArrowRight":
-      player.x++;
-      break;
-    case "ArrowLeft":
-      player.x--;
-      break;
+const handleHorizontalMovement = (input, player) => {
+  for (const key of input) {
+    switch (key) {
+      case "ArrowRight":
+        player.x++;
+        break;
+      case "ArrowLeft":
+        player.x--;
+        break;
 
-    default:
-      break;
+      default:
+        break;
+    }
   }
 };

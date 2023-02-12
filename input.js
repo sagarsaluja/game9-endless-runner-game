@@ -4,6 +4,7 @@ const gameControls = [
   "ArrowLeft",
   "ArrowRight",
   "Enter",
+  "r",
 ];
 export class InputHandler {
   constructor() {
