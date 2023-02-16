@@ -38,7 +38,7 @@ export class Sitting extends State {
   }
   handleInput(input) {
     if (input.has("ArrowLeft") || input.has("ArrowRight")) {
-      this.player.setState(states.RUNNING, 1);
+      this.player.setState(states.RUNNING);
     }
     //no game based state changes
   }
@@ -60,7 +60,7 @@ export class Running extends State {
 
     if (input.has("r")) {
       //running to rolling
-      this.player.setState(states.ROLLING, 2);
+      this.player.setState(states.ROLLING);
     }
     if (
       //running to jumping
@@ -68,7 +68,7 @@ export class Running extends State {
       this.player.onGround() &&
       !input.has("r")
     ) {
-      this.player.setState(states.JUMPING, 1);
+      this.player.setState(states.JUMPING);
     }
 
     if (
@@ -77,7 +77,7 @@ export class Running extends State {
       !input.has("r") &&
       !input.has("ArrowUp")
     ) {
-      this.player.setState(states.SITTING, 0);
+      this.player.setState(states.SITTING);
     }
   }
 }
@@ -96,12 +96,11 @@ export class Jumping extends State {
     // handleHorizontalMovement(input, this.player);
     if (input.has("r")) {
       //to rolling
-      console.log("going to rolling");
-      this.player.setState(states.ROLLING, 2);
+      this.player.setState(states.ROLLING);
     }
     if (this.player.speedY >= 0 && !input.has("r")) {
       //to falling
-      this.player.setState(states.FALLING, 1);
+      this.player.setState(states.FALLING);
     }
   }
 }
@@ -119,11 +118,11 @@ export class Falling extends State {
     // handleHorizontalMovement(input, this.player);
     if (input.has("r")) {
       //falling to rolling
-      this.player.setState(states.ROLLING, 2);
+      this.player.setState(states.ROLLING);
     }
     //falling to running
     if (this.player.onGround() && !input.has("r")) {
-      this.player.setState(states.RUNNING, 1);
+      this.player.setState(states.RUNNING);
     }
   }
 }
@@ -140,15 +139,15 @@ export class Rolling extends State {
     // handleHorizontalMovement(input, this.player);
     //rolling to running
     if (this.player.onGround() && !input.has("r")) {
-      this.player.setState(states.RUNNING, 1);
+      this.player.setState(states.RUNNING);
     }
     //rolling to jumping
     if (this.player.speedY < 0 && !input.has("r")) {
-      this.player.setState(states.JUMPING, 1);
+      this.player.setState(states.JUMPING);
     }
     //rolling to falling
     if (this.player.speedY >= 0 && !input.has("r")) {
-      this.player.setState(states.FALLING, 1);
+      this.player.setState(states.FALLING);
     }
   }
 }

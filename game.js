@@ -3,6 +3,7 @@ import { Player } from "./player.js";
 import { Layer } from "./layer.js";
 import { flyingEnemy, spiderEnemy, plantEnemy } from "./enemies.js";
 import { Collision } from "./collision.js";
+import { constants } from "./Constants.js";
 //be careful !! import in from ./player.js not just ./player
 
 window.addEventListener("load", () => {

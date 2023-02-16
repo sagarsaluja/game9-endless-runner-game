@@ -16,6 +16,7 @@ import {
   Sitting,
   states,
 } from "./playerStates.js";
+import { gameSpeeds } from "./Constants.js";
 export class Player {
   constructor(game) {
     this.game = game;
@@ -88,9 +89,16 @@ export class Player {
   onGround() {
     return this.y >= this.game.height - this.height - this.game.groundMargin;
   }
-  setState(state, speed) {
+  setState(state) {
     this.currentState = this.states[state];
-    this.game.speed = speed;
+    //this logic can be moved to individual states.
+    if (this.currentState.state === states["ROLLING"]) {
+      this.game.speed = gameSpeeds.ROLLING;
+    } else if (this.currentState.state === states["SITTING"]) {
+      this.game.speed = gameSpeeds.SITTING;
+    } else {
+      this.game.speed = gameSpeeds.DEFAULT;
+    }
     this.currentState.enter();
   }
   handleHorizontalMovement(input) {
