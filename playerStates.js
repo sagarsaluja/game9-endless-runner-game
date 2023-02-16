@@ -90,7 +90,7 @@ export class Jumping extends State {
   enter() {
     this.player.maxFrame = 6;
     this.player.currentFrameY = 1;
-    if (this.player.speedY === 0) this.player.speedY -= 10;
+    if (this.player.speedY === 0) this.player.speedY -= 11.5;
   }
   handleInput(input) {
     // handleHorizontalMovement(input, this.player);

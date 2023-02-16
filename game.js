@@ -3,7 +3,7 @@ import { Player } from "./player.js";
 import { Layer } from "./layer.js";
 import { flyingEnemy, spiderEnemy, plantEnemy } from "./enemies.js";
 import { Collision } from "./collision.js";
-import { constants } from "./Constants.js";
+import { gameSpeeds } from "./Constants.js";
 //be careful !! import in from ./player.js not just ./player
 
 window.addEventListener("load", () => {
@@ -23,7 +23,7 @@ window.addEventListener("load", () => {
       this.groundMargin = 80;
       this.player = new Player(this); //this passed here is the game object!
       this.input = new InputHandler();
-      this.speed = 0;
+      this.speed = gameSpeeds.SITTING;
       this.layers = [
         new Layer(0, "layer1", this),
         new Layer(0.4, "layer2", this),

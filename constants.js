@@ -24,8 +24,4 @@ export const gameSpeeds = Object.freeze({
   ROLLING: 10,
   SITTING: 0,
 });
-export const constants = Object.freeze({
-  GAME_SPEED: 5,
-  ROLLING_GAME_SPEED: 10,
-  SITTING_GAME_SPEED: 0,
-});
+export const constants = Object.freeze({});
