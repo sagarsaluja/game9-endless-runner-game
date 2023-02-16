@@ -1,4 +1,4 @@
-import { states } from "./playerStates.js";
+import { playerStates } from "./Constants.js";
 export const enemyTypes = {
   spider: 1,
   plant: 2,
@@ -65,10 +65,10 @@ export class flyingEnemy extends Enemy {
   handleCollision(player) {
     if (
       [
-        states["RUNNING"],
-        states["JUMPING"],
-        states["FALLING"],
-        states["SITTING"],
+        playerStates["RUNNING"],
+        playerStates["JUMPING"],
+        playerStates["FALLING"],
+        playerStates["SITTING"],
       ].includes(player.currentState.state)
     ) {
       player.isKilled = true;
@@ -90,10 +90,10 @@ export class plantEnemy extends Enemy {
   handleCollision(player) {
     if (
       [
-        states["RUNNING"],
-        states["JUMPING"],
-        states["FALLING"],
-        states["SITTING"],
+        playerStates["RUNNING"],
+        playerStates["JUMPING"],
+        playerStates["FALLING"],
+        playerStates["SITTING"],
       ].includes(player.currentState.state)
     ) {
       player.isKilled = true;
@@ -128,17 +128,7 @@ export class spiderEnemy extends Enemy {
     super.draw(context);
   }
   handleCollision(player) {
-    if (player.currentState.state === states["ROLLING"]) {
-      player.isKilled = true;
-    }
-    if (
-      [
-        states["RUNNING"],
-        states["JUMPING"],
-        states["FALLING"],
-        states["SITTING"],
-      ].includes(player.currentState.state)
-    ) {
+    if (player.currentState.state === playerStates["ROLLING"]) {
       player.isKilled = true;
     }
   }

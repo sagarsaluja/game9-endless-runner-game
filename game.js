@@ -91,10 +91,12 @@ window.addEventListener("load", () => {
           enemy.y >= this.player.y - enemy.height
         ) {
           enemy.handleCollision(this.player);
-          if (!this.player.isKilled) enemy.markedForDeletion = true;
-          this.collisionSplash.push(
-            new Collision("boom", 5, 4, enemy.x, enemy.y)
-          );
+          if (!this.player.isKilled) {
+            enemy.markedForDeletion = true;
+            this.collisionSplash.push(
+              new Collision("boom", 5, 4, enemy.x, enemy.y)
+            );
+          }
         }
       });
     }

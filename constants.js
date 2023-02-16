@@ -1,4 +1,4 @@
-export const states = {
+export const playerStates = {
   IDLE: 0,
 
   JUMPING: 1,
@@ -19,6 +19,10 @@ export const states = {
 
   GET_HIT: 9,
 };
+export const jumpVelocities = Object.freeze({
+  JUMP: 11,
+  ROLLING: 11.7,
+});
 export const gameSpeeds = Object.freeze({
   DEFAULT: 5,
   ROLLING: 10,

@@ -14,9 +14,8 @@ import {
   Rolling,
   Running,
   Sitting,
-  states,
 } from "./playerStates.js";
-import { gameSpeeds } from "./Constants.js";
+import { gameSpeeds, playerStates } from "./Constants.js";
 export class Player {
   constructor(game) {
     this.game = game;
@@ -93,9 +92,9 @@ export class Player {
   setState(state) {
     this.currentState = this.states[state];
     //this logic can be moved to individual states.
-    if (this.currentState.state === states["ROLLING"]) {
+    if (this.currentState.state === playerStates["ROLLING"]) {
       this.game.speed = gameSpeeds.ROLLING;
-    } else if (this.currentState.state === states["SITTING"]) {
+    } else if (this.currentState.state === playerStates["SITTING"]) {
       this.game.speed = gameSpeeds.SITTING;
     } else {
       this.game.speed = gameSpeeds.DEFAULT;
@@ -122,14 +121,20 @@ export class Player {
     if (!this.onGround()) {
       this.speedY += this.weight;
     }
-    if (this.onGround() && this.currentState.state === states["FALLING"]) {
-      this.setState(states.RUNNING, 1);
+    if (
+      this.onGround() &&
+      this.currentState.state === playerStates["FALLING"]
+    ) {
+      this.setState(playerStates.RUNNING, 1);
       this.speedY = 0;
     }
-    if (this.onGround() && this.currentState.state === states["ROLLING"]) {
+    if (
+      this.onGround() &&
+      this.currentState.state === playerStates["ROLLING"]
+    ) {
       this.speedY = 0;
     }
-    if (this.onGround() && this.currentState.state === states["DIZZY"]) {
+    if (this.onGround() && this.currentState.state === playerStates["DIZZY"]) {
       this.speedY = 0;
     }
   }
