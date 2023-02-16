@@ -39,7 +39,7 @@ window.addEventListener("load", () => {
       this.score = 0;
     }
     update(deltaTime) {
-      this.detectCollision();
+      if (!this.player.isKilled) this.detectCollision();
       if (this.enemyTimer > this.enemyInterval) {
         this.addEnemies();
         this.enemyTimer = 0;
@@ -90,10 +90,8 @@ window.addEventListener("load", () => {
           enemy.y <= this.player.y + this.player.height &&
           enemy.y >= this.player.y - enemy.height
         ) {
-          if (enemy.enemyType === enemyTypes.spider) {
-            enemy.handleCollision(this.player);
-          }
-          enemy.markedForDeletion = true;
+          enemy.handleCollision(this.player);
+          if (!this.player.isKilled) enemy.markedForDeletion = true;
           this.collisionSplash.push(
             new Collision("boom", 5, 4, enemy.x, enemy.y)
           );

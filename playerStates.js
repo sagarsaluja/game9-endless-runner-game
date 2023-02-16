@@ -79,6 +79,10 @@ export class Running extends State {
     ) {
       this.player.setState(states.SITTING);
     }
+    if (this.player.isKilled) {
+      this.player.setState(states.DIZZY);
+    }
+    //to dizzy
   }
 }
 export class Jumping extends State {
@@ -102,6 +106,9 @@ export class Jumping extends State {
       //to falling
       this.player.setState(states.FALLING);
     }
+    if (this.player.isKilled) {
+      this.player.setState(states.DIZZY);
+    }
   }
 }
 export class Falling extends State {
@@ -123,6 +130,9 @@ export class Falling extends State {
     //falling to running
     if (this.player.onGround() && !input.has("r")) {
       this.player.setState(states.RUNNING);
+    }
+    if (this.player.isKilled) {
+      this.player.setState(states.DIZZY);
     }
   }
 }
@@ -176,6 +186,9 @@ export class Dizzy extends State {
       //to rolling
       if (input.has("r")) {
         this.player.setState(states.ROLLING);
+      }
+      if (this.player.onGround()) {
+        this.player.setState(states.RUNNING);
       }
       //implement all others.
     }

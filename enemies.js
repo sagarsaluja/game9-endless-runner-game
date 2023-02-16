@@ -62,6 +62,18 @@ export class flyingEnemy extends Enemy {
     this.y += Math.sin(this.angle);
     super.update(deltaTime);
   }
+  handleCollision(player) {
+    if (
+      [
+        states["RUNNING"],
+        states["JUMPING"],
+        states["FALLING"],
+        states["SITTING"],
+      ].includes(player.currentState.state)
+    ) {
+      player.isKilled = true;
+    }
+  }
 }
 export class plantEnemy extends Enemy {
   constructor(game, image) {
@@ -74,6 +86,18 @@ export class plantEnemy extends Enemy {
   update(deltaTime) {
     this.speedX = this.game.speed;
     super.update(deltaTime);
+  }
+  handleCollision(player) {
+    if (
+      [
+        states["RUNNING"],
+        states["JUMPING"],
+        states["FALLING"],
+        states["SITTING"],
+      ].includes(player.currentState.state)
+    ) {
+      player.isKilled = true;
+    }
   }
 }
 export class spiderEnemy extends Enemy {
@@ -105,10 +129,17 @@ export class spiderEnemy extends Enemy {
   }
   handleCollision(player) {
     if (player.currentState.state === states["ROLLING"]) {
-      console.log("killed");
       player.isKilled = true;
-    } else {
-      player.game.score++;
+    }
+    if (
+      [
+        states["RUNNING"],
+        states["JUMPING"],
+        states["FALLING"],
+        states["SITTING"],
+      ].includes(player.currentState.state)
+    ) {
+      player.isKilled = true;
     }
   }
 }
