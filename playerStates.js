@@ -149,14 +149,39 @@ export class Rolling extends State {
     if (this.player.speedY >= 0 && !input.has("r")) {
       this.player.setState(states.FALLING);
     }
-  }
-}
-export class Idle extends State {
-  constructor(player) {
-    super("IDLE", player);
+    //rolling to dizzy
+    if (this.player.isKilled) {
+      this.player.setState(states.DIZZY);
+    }
+    //rolling to jump , but still rolling
+    if (this.player.onGround() && input.has("r") && input.has("ArrowUp")) {
+      this.player.speedY -= 11.5;
+    }
   }
 }
 export class Dizzy extends State {
+  constructor(player) {
+    super("DIZZY", player);
+    this.player = player;
+  }
+  enter() {
+    this.player.maxFrame = 6;
+    this.player.currentFrameY = 4;
+    setTimeout(() => {
+      this.player.isKilled = false;
+    }, 1500);
+  }
+  handleInput(input) {
+    if (!this.player.isKilled) {
+      //to rolling
+      if (input.has("r")) {
+        this.player.setState(states.ROLLING);
+      }
+      //implement all others.
+    }
+  }
+}
+export class Idle extends State {
   constructor(player) {
     super("IDLE", player);
   }

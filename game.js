@@ -4,6 +4,7 @@ import { Layer } from "./layer.js";
 import { flyingEnemy, spiderEnemy, plantEnemy } from "./enemies.js";
 import { Collision } from "./collision.js";
 import { gameSpeeds } from "./Constants.js";
+import { enemyTypes } from "./enemies.js";
 //be careful !! import in from ./player.js not just ./player
 
 window.addEventListener("load", () => {
@@ -35,6 +36,7 @@ window.addEventListener("load", () => {
       this.enemyTimer = 0;
       this.enemyInterval = 100;
       this.collisionSplash = [];
+      this.score = 0;
     }
     update(deltaTime) {
       this.detectCollision();
@@ -88,6 +90,9 @@ window.addEventListener("load", () => {
           enemy.y <= this.player.y + this.player.height &&
           enemy.y >= this.player.y - enemy.height
         ) {
+          if (enemy.enemyType === enemyTypes.spider) {
+            enemy.handleCollision(this.player);
+          }
           enemy.markedForDeletion = true;
           this.collisionSplash.push(
             new Collision("boom", 5, 4, enemy.x, enemy.y)

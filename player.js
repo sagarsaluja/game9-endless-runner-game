@@ -48,6 +48,7 @@ export class Player {
     this.fps = 20; //the sprite sheet is designed for 20 fps , and we can pass delta Time to the player class to set a different fps
     this.frameInterval = 50; //just convert fps to miliseconds and invert it. 1000/20
     this.timeToUpdateFrame = 0;
+    this.isKilled = false;
   }
   update(input, deltaTime) {
     this.currentState.handleInput(input);
@@ -126,6 +127,9 @@ export class Player {
       this.speedY = 0;
     }
     if (this.onGround() && this.currentState.state === states["ROLLING"]) {
+      this.speedY = 0;
+    }
+    if (this.onGround() && this.currentState.state === states["DIZZY"]) {
       this.speedY = 0;
     }
   }

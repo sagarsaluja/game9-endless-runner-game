@@ -1,5 +1,9 @@
-/** @type {HTMLCanvasElement} */
-
+import { states } from "./playerStates.js";
+export const enemyTypes = {
+  spider: 1,
+  plant: 2,
+  flying: 3,
+};
 export class Enemy {
   constructor(game, image, dividingWidth) {
     this.game = game;
@@ -82,6 +86,7 @@ export class spiderEnemy extends Enemy {
     this.angle = Math.random() * Math.PI * 2 - Math.PI;
     this.angleSpeed = Math.random() * 0.01 + 0.01;
     this.speedY = 0.5 * Math.sin(this.angle);
+    this.enemyType = enemyTypes.spider;
   }
   update(deltaTime) {
     this.speedX = this.game.speed;
@@ -97,6 +102,14 @@ export class spiderEnemy extends Enemy {
     context.lineWidth = 1;
     context.stroke();
     super.draw(context);
+  }
+  handleCollision(player) {
+    if (player.currentState.state === states["ROLLING"]) {
+      console.log("killed");
+      player.isKilled = true;
+    } else {
+      player.game.score++;
+    }
   }
 }
 

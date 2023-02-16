@@ -24,4 +24,8 @@ export const gameSpeeds = Object.freeze({
   ROLLING: 10,
   SITTING: 0,
 });
-export const constants = Object.freeze({});
+export const enemyTypes = Object.freeze({
+  SPIDER: 1,
+  FLYING: 2,
+  PLANT: 3,
+});
