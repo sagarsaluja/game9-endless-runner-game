@@ -4,7 +4,6 @@ import { Layer } from "./layer.js";
 import { flyingEnemy, spiderEnemy, plantEnemy } from "./enemies.js";
 import { Collision } from "./collision.js";
 import { gameSpeeds } from "./Constants.js";
-import { enemyTypes } from "./enemies.js";
 //be careful !! import in from ./player.js not just ./player
 
 window.addEventListener("load", () => {
@@ -37,9 +36,20 @@ window.addEventListener("load", () => {
       this.enemyInterval = 100;
       this.collisionSplash = [];
       this.score = 0;
+      this.isGameOver = false;
+      this.lives = 3;
     }
     update(deltaTime) {
       if (!this.player.isKilled) this.detectCollision();
+      else {
+        if (this.lives === 0) {
+          this.isGameOver = true;
+          return;
+        } else {
+          console.log("lives left", this.lives);
+          this.player.isKilled = false;
+        }
+      }
       if (this.enemyTimer > this.enemyInterval) {
         this.addEnemies();
         this.enemyTimer = 0;
@@ -91,17 +101,49 @@ window.addEventListener("load", () => {
           enemy.y >= this.player.y - enemy.height
         ) {
           enemy.handleCollision(this.player);
+          enemy.markedForDeletion = true;
           if (!this.player.isKilled) {
-            enemy.markedForDeletion = true;
             this.collisionSplash.push(
               new Collision("boom", 5, 4, enemy.x, enemy.y)
             );
+          } else {
+            this.lives -= 1;
           }
         }
       });
     }
   }
   const game = new Game(canvas.width, canvas.height);
+  const drawGameOver = () => {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "black";
+    context.textAlign = "center";
+    context.font = "30px Arial";
+    context.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
+    context.fillText(
+      "SCORE: " + game.score,
+      canvas.width / 2,
+      canvas.height / 1.5
+    );
+  };
+  const livesLeft = () => {
+    context.fillStyle = "black";
+    context.font = "20px Arial";
+    context.fillText(
+      "Lives Left: " + game.lives,
+      canvas.width / 50,
+      canvas.height / 25
+    );
+  };
+  const drawScore = () => {
+    context.fillStyle = "black";
+    context.font = "20px Arial";
+    context.fillText(
+      "Score: " + game.score,
+      canvas.width / 2,
+      canvas.height / 25
+    );
+  };
   let accumulatedTime = 0,
     deltaTime = 0;
   const animationLogic = (timeStamp) => {
@@ -110,10 +152,16 @@ window.addEventListener("load", () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
     game.draw(context);
     game.update(deltaTime);
+    livesLeft();
+    drawScore();
   };
   const animate = (timeStamp) => {
     animationLogic(timeStamp);
-    requestAnimationFrame(animate);
+    if (!game.isGameOver) {
+      requestAnimationFrame(animate);
+    } else {
+      drawGameOver();
+    }
   };
   animate(0);
 });

@@ -1,4 +1,4 @@
-import { jumpVelocities, playerStates } from "./Constants.js";
+import { constants, jumpVelocities, playerStates } from "./Constants.js";
 
 class State {
   constructor(state) {
@@ -139,13 +139,14 @@ export class Rolling extends State {
     if (this.player.speedY >= 0 && !input.has("r")) {
       this.player.setState(playerStates.FALLING);
     }
-    //rolling to dizzy
-    if (this.player.isKilled) {
-      this.player.setState(playerStates.DIZZY);
-    }
     //rolling to jump , but still rolling
     if (this.player.onGround() && input.has("r") && input.has("ArrowUp")) {
       this.player.speedY -= jumpVelocities.ROLLING;
+    }
+    //rolling to dizzy
+    if (this.player.isKilled) {
+      console.log("setting dizzy");
+      this.player.setState(playerStates.DIZZY);
     }
   }
 }
@@ -157,12 +158,13 @@ export class Dizzy extends State {
   enter() {
     this.player.maxFrame = 6;
     this.player.currentFrameY = 4;
+    this.isDizzy = true;
     setTimeout(() => {
-      this.player.isKilled = false;
-    }, 1500);
+      this.isDizzy = false;
+    }, constants.DIZZY_TIME);
   }
   handleInput(input) {
-    if (!this.player.isKilled) {
+    if (!this.isDizzy) {
       //to rolling
       if (input.has("r")) {
         this.player.setState(playerStates.ROLLING);

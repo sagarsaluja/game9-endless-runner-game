@@ -72,6 +72,8 @@ export class flyingEnemy extends Enemy {
       ].includes(player.currentState.state)
     ) {
       player.isKilled = true;
+    } else {
+      this.game.score++;
     }
   }
 }
@@ -97,6 +99,8 @@ export class plantEnemy extends Enemy {
       ].includes(player.currentState.state)
     ) {
       player.isKilled = true;
+    } else {
+      this.game.score++;
     }
   }
 }
@@ -129,7 +133,10 @@ export class spiderEnemy extends Enemy {
   }
   handleCollision(player) {
     if (player.currentState.state === playerStates["ROLLING"]) {
+      console.log("gettin killed rolling");
       player.isKilled = true;
+    } else if (player.currentState.state !== playerStates["DIZZY"]) {
+      this.game.score++;
     }
   }
 }

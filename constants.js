@@ -1,4 +1,4 @@
-export const playerStates = {
+export const playerStates = Object.freeze({
   IDLE: 0,
 
   JUMPING: 1,
@@ -18,18 +18,21 @@ export const playerStates = {
   KO: 8,
 
   GET_HIT: 9,
-};
+});
 export const jumpVelocities = Object.freeze({
-  JUMP: 11,
-  ROLLING: 11.7,
+  JUMP: 11.5,
+  ROLLING: 12.2,
 });
 export const gameSpeeds = Object.freeze({
-  DEFAULT: 5,
-  ROLLING: 10,
+  DEFAULT: 3,
+  ROLLING: 5,
   SITTING: 0,
 });
 export const enemyTypes = Object.freeze({
   SPIDER: 1,
   FLYING: 2,
   PLANT: 3,
+});
+export const constants = Object.freeze({
+  DIZZY_TIME: 1500,
 });
