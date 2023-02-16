@@ -50,32 +50,22 @@ export class Player {
   }
   update(input, deltaTime) {
     this.currentState.handleInput(input);
+    this.boundPlayerWithinBoundaries();
+    this.handleVerticalMovement();
+    this.handleHorizontalMovement(input);
+    this.updatePlayerAnimation(deltaTime);
+  }
 
-    if (this.speedY > 0) {
-      this.setState(states.FALLING, 1);
-    }
-    this.y += this.speedY;
-    if (this.x < 0) this.x = 0;
-    if (this.x + this.width > this.game.width) {
-      this.x = this.game.width - this.width;
-    }
-
-    if (!this.onGround()) {
-      this.speedY += this.weight;
-    }
-    if (this.onGround() && this.currentState.state === states["FALLING"]) {
-      this.setState(states.RUNNING, 1);
-      this.speedY = 0;
-    }
-
+  updatePlayerAnimation(deltaTime) {
     if (this.timeToUpdateFrame > this.frameInterval) {
-      this.updateFrame();
+      this.updateFrameX();
       this.timeToUpdateFrame = 0;
     } else {
       this.timeToUpdateFrame += deltaTime;
     }
   }
-  updateFrame() {
+
+  updateFrameX() {
     if (this.currentFrameX < this.maxFrame) {
       this.currentFrameX++;
     } else {
@@ -102,5 +92,39 @@ export class Player {
     this.currentState = this.states[state];
     this.game.speed = speed;
     this.currentState.enter();
+  }
+  handleHorizontalMovement(input) {
+    for (const key of input) {
+      switch (key) {
+        case "ArrowRight":
+          this.x++;
+          break;
+        case "ArrowLeft":
+          this.x--;
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+  handleVerticalMovement() {
+    this.y += this.speedY;
+    if (!this.onGround()) {
+      this.speedY += this.weight;
+    }
+    if (this.onGround() && this.currentState.state === states["FALLING"]) {
+      this.setState(states.RUNNING, 1);
+      this.speedY = 0;
+    }
+    if (this.onGround() && this.currentState.state === states["ROLLING"]) {
+      this.speedY = 0;
+    }
+  }
+  boundPlayerWithinBoundaries() {
+    if (this.x < 0) this.x = 0;
+    if (this.x + this.width > this.game.width) {
+      this.x = this.game.width - this.width;
+    }
   }
 }

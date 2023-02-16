@@ -40,6 +40,7 @@ export class Sitting extends State {
     if (input.has("ArrowLeft") || input.has("ArrowRight")) {
       this.player.setState(states.RUNNING, 1);
     }
+    //no game based state changes
   }
 }
 export class Running extends State {
@@ -53,11 +54,29 @@ export class Running extends State {
     this.player.currentFrameY = 3;
   }
   handleInput(input) {
-    handleHorizontalMovement(input, this.player);
-    if (input.has("ArrowUp") && this.player.onGround()) {
+    //movement
+    // handleHorizontalMovement(input, this.player);
+    //input based state updates
+
+    if (input.has("r")) {
+      //running to rolling
+      this.player.setState(states.ROLLING, 2);
+    }
+    if (
+      //running to jumping
+      input.has("ArrowUp") &&
+      this.player.onGround() &&
+      !input.has("r")
+    ) {
       this.player.setState(states.JUMPING, 1);
     }
-    if (input.has("ArrowDown") && this.player.onGround()) {
+
+    if (
+      input.has("ArrowDown") &&
+      this.player.onGround() &&
+      !input.has("r") &&
+      !input.has("ArrowUp")
+    ) {
       this.player.setState(states.SITTING, 0);
     }
   }
@@ -71,10 +90,19 @@ export class Jumping extends State {
   enter() {
     this.player.maxFrame = 6;
     this.player.currentFrameY = 1;
-    this.player.speedY -= 10;
+    if (this.player.speedY === 0) this.player.speedY -= 10;
   }
   handleInput(input) {
-    handleHorizontalMovement(input, this.player);
+    // handleHorizontalMovement(input, this.player);
+    if (input.has("r")) {
+      //to rolling
+      console.log("going to rolling");
+      this.player.setState(states.ROLLING, 2);
+    }
+    if (this.player.speedY >= 0 && !input.has("r")) {
+      //to falling
+      this.player.setState(states.FALLING, 1);
+    }
   }
 }
 export class Falling extends State {
@@ -88,7 +116,15 @@ export class Falling extends State {
     this.player.currentFrameY = 2;
   }
   handleInput(input) {
-    handleHorizontalMovement(input, this.player);
+    // handleHorizontalMovement(input, this.player);
+    if (input.has("r")) {
+      //falling to rolling
+      this.player.setState(states.ROLLING, 2);
+    }
+    //falling to running
+    if (this.player.onGround() && !input.has("r")) {
+      this.player.setState(states.RUNNING, 1);
+    }
   }
 }
 export class Rolling extends State {
@@ -101,7 +137,19 @@ export class Rolling extends State {
     this.player.currentFrameY = 6;
   }
   handleInput(input) {
-    handleHorizontalMovement(input, this.player);
+    // handleHorizontalMovement(input, this.player);
+    //rolling to running
+    if (this.player.onGround() && !input.has("r")) {
+      this.player.setState(states.RUNNING, 1);
+    }
+    //rolling to jumping
+    if (this.player.speedY < 0 && !input.has("r")) {
+      this.player.setState(states.JUMPING, 1);
+    }
+    //rolling to falling
+    if (this.player.speedY >= 0 && !input.has("r")) {
+      this.player.setState(states.FALLING, 1);
+    }
   }
 }
 export class Idle extends State {
@@ -129,18 +177,3 @@ export class GetHit extends State {
     super("IDLE", player);
   }
 }
-const handleHorizontalMovement = (input, player) => {
-  for (const key of input) {
-    switch (key) {
-      case "ArrowRight":
-        player.x++;
-        break;
-      case "ArrowLeft":
-        player.x--;
-        break;
-
-      default:
-        break;
-    }
-  }
-};
