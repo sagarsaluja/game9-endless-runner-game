@@ -46,7 +46,6 @@ window.addEventListener("load", () => {
           this.isGameOver = true;
           return;
         } else {
-          console.log("lives left", this.lives);
           this.player.isKilled = false;
         }
       }
@@ -156,6 +155,19 @@ window.addEventListener("load", () => {
     drawScore();
   };
   const animate = (timeStamp) => {
+    //Say this recursive function depending on machine is called every 8 ms and has inconsistencies 
+    //The timestamp will increase by 8 ms every time its called, different on different machines.
+    //delta time is newTS - oldTS => equal to 8ms approx
+    //game.update will be called with this calculated delta time.
+    //every asset has its own fps according to its sprite sheet.
+    //frameInterval variable is 1/fps in miliseconds.
+    //when time to update frame > frameInterval, update the frame for that asset.
+    //if not, this.timeToUpdateFrame += deltaTime;
+
+
+    //player , enemies and splash is updated using delta time
+    //layers are updated according to gamespeed.
+
     animationLogic(timeStamp);
     if (!game.isGameOver) {
       requestAnimationFrame(animate);

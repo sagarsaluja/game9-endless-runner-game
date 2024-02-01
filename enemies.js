@@ -56,8 +56,10 @@ export class flyingEnemy extends Enemy {
     this.y = Math.random() * game.height * 0.5;
     this.angle = Math.random() * Math.PI * 2 - Math.PI;
     this.speedX = Math.random() + 1 + game.speed;
+    this.game = game;
   }
   update(deltaTime) {
+    this.speedX = Math.random() + 1 + this.game.speed;
     this.angle += Math.random() * 0.1 + 0.1;
     this.y += Math.sin(this.angle);
     super.update(deltaTime);
